@@ -21,7 +21,7 @@ class Calendar(Resource):
             result.append({"id" : elem[0], "keylink" : elem[1]})
         return jsonify(result)
 
-    def put(self):
+    def post(self):
         conn = db_connect.connect()
         query = conn.execute("select keylink from calendar")
         new_key = binascii.b2a_hex(os.urandom(8))
@@ -45,7 +45,7 @@ class CalendarEvent(Resource):
             result.append({"id" : elem[0], "name" : elem[2], "color" : elem[3], "start" : elem[4], "end" : elem[5]})
         return jsonify(result)
 
-    def put(self, keylink):
+    def post(self, keylink):
         name = request.form['name']
         color = request.form['color']
         start = dateparser.parse(request.form['start'])
@@ -63,4 +63,4 @@ api.add_resource(Calendar, '/calendar')
 api.add_resource(CalendarEvent, '/calendar/<string:keylink>')
 
 if __name__ == '__main__':
-     app.run(port='5002')
+     app.run(port=5002, host='0.0.0.0')
