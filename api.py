@@ -19,7 +19,9 @@ class Calendar(Resource):
         result = []
         for elem in query.cursor.fetchall():
             result.append({"id" : elem[0], "keylink" : elem[1]})
-        return jsonify(result)
+        resp = jsonify(result)
+        resp.headers['Access-Control-Allow-Origin'] = '*';
+        return resp
 
     def post(self):
         conn = db_connect.connect()
@@ -28,13 +30,17 @@ class Calendar(Resource):
         while new_key in query:
             new_key = binascii.b2a_hex(os.urandom(8))
         conn.execute("insert into calendar (keylink) values (?)", new_key)
-        return jsonify({"keylink" : new_key})
+        resp = jsonify({"keylink" : new_key})
+        resp.headers['Access-Control-Allow-Origin'] = '*';
+        return resp
 
     def delete(self):
         conn = db_connect.connect()
         conn.execute("delete from event where keylink=?", request.form['keylink'])
         conn.execute("delete from calendar where keylink=?", request.form['keylink'])
-        return ({"result" : "ok"})
+        resp = jsonify({"result" : "ok"})
+        resp.headers['Access-Control-Allow-Origin'] = '*';
+        return resp
 
 class CalendarEvent(Resource):
     def get(self, keylink):
@@ -43,7 +49,9 @@ class CalendarEvent(Resource):
         result = []
         for elem in query.cursor.fetchall():
             result.append({"id" : elem[0], "name" : elem[2], "color" : elem[3], "start" : elem[4], "end" : elem[5]})
-        return jsonify(result)
+        resp = jsonify(result)
+        resp.headers['Access-Control-Allow-Origin'] = '*';
+        return resp
 
     def post(self, keylink):
         name = request.form['name']
@@ -52,12 +60,16 @@ class CalendarEvent(Resource):
         end = dateparser.parse(request.form['end'])
         conn = db_connect.connect()
         conn.execute("insert into event (keylink, name, color, start, end) values (?, ?, ?, ?, ?)", keylink, name, color, unicode(start), unicode(end))
-        return ({"result" : "ok"})
+        resp = jsonify({"result" : "ok"})
+        resp.headers['Access-Control-Allow-Origin'] = '*';
+        return resp
 
     def delete(self, keylink):
         conn = db_connect.connect()
         conn.execute("delete from event where id=?", request.form['id'])
-        return ({"result" : "ok"})
+        resp = jsonify({"result" : "ok"})
+        resp.headers['Access-Control-Allow-Origin'] = '*';
+        return resp
 
 api.add_resource(Calendar, '/calendar')
 api.add_resource(CalendarEvent, '/calendar/<string:keylink>')

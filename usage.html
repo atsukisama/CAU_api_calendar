@@ -1,8 +1,19 @@
-<form action="https://apiweb.neo.ovh/calendar" method="get">
+<form action="https://apiweb.neo.ovh/calendar"w method="GET">
     <input type="submit" value="Display avaible calendar">
 </form>
 
-<form action="https://apiweb.neo.ovh/calendar" method="put">
-    <input type="hidden" name="_method" value="PUT">
-    <input type="submit" value="Request new calendar">
+<form action="https://apiweb.neo.ovh/calendar" method="POST">
+    <input type="submit" value="Create new calendar">
+</form>
+
+<form action="https://apiweb.neo.ovh/calendar/861178119092b17f" method="GET">
+    <input type="submit" value="List calender 861178119092b17f events">
+</form>
+
+<form action="https://apiweb.neo.ovh/calendar/861178119092b17f" method="POST">
+    name: <input type="text" name="name"><br>
+    color: <input type="text" name="color"><br>
+    start: <input type="text" name="start"><br>
+    end: <input type="text" name="end"><br>    
+    <input type="submit" value="Add event to calendar 861178119092b17f">
 </form>
